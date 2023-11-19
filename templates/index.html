@@ -1,26 +1,108 @@
-<!doctype html>
-<html>
-    <head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></head>
-    <body>
-        <div class="container">
-            <h1>Simple image search engine</h1>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="file" name="query_img"><br>
-                <input type="submit">
-            </form>
-            <h2>Query:</h2>
-            {% if query_path %}
-            <img src="{{ query_path }}" width="300px">
-            {% endif %}
-            <h2>Results:</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple Image Search Engine</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa; /* Light gray background color */
+        }
+
+        .container {
+            background-color: #ffffff; /* White background color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+        }
+
+        h1 {
+            color: #007bff; /* Bootstrap primary color */
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da; /* Bootstrap gray border */
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #28a745; /* Bootstrap success color */
+            color: #fff; /* White text color */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        h2 {
+            color: #343a40; /* Bootstrap dark gray color */
+            margin-top: 20px;
+        }
+
+        .results figure {
+            float: left;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        figcaption {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Moteur de recherche d'images</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="query_img" class="form-control">
+            <h3>Feature Extractor Method</h3>
+            <p>It is based on a pretrained image classification model , it extracts a deep-feature from the image. Each feature is a 4096D fc6 activation from a VGG16 model with ImageNet pre-trained weights.</p>
+            <h3> Histogram extractor Method</h3>
+            <p>This method simply transforms the levels of grayand then  calculates the histogram that acts as the descriptor for that image     </p>
+            <!-- Add the input for Num_res -->
+            <label for="method"><h2>Select method:</h2></label>
+            <select name="method" class="form-control">
+                <option value="feature">Feature Extractor</option>
+                <option value="hist">Histogram Extractor</option>
+            </select>
+            <br>
+            <label for="num_res">Number of Results to Show:</label>
+            <input type="number" name="num_res" class="form-control" value="10" min="1">
+            <br>
+            <input type="submit" class="btn btn-success" value="Submit">
+        </form>
+        <h2>Query:</h2>
+        {% if query_path %}
+            <img src="{{ query_path }}" class="img-responsive" width="300px">
+        {% endif %}
+        <h2>Results:</h2>
+        <div class="results">
             {% for score in scores %}
-            <figure style="float: left; margin-right: 20px; margin-bottom: 20px;">
-                <img src="{{ score[1] }}" height="200px">
-                <figcaption>{{ score[0] }}</figcaption>
-            </figure>
+                <figure>
+                    <img src="{{ score[1] }}" class="img-responsive" height="200px">
+                    <figcaption>{{ score[0] }}</figcaption>
+                </figure>
             {% endfor %}
         </div>
-    </body>
+    </div>
+</body>
 </html>
-
-
